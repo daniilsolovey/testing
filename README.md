@@ -2,14 +2,14 @@
 
 A simple auto-test for site with python
 
-# Requirements and Installation
+# Requirements
 * python3
 * pip
 * selenium
 
 
-# How To Run Tests
-Run tests locally in parallel:
+# How To Run Test
+Run test locally:
 ```bash
 $ pytest main.py
 ```

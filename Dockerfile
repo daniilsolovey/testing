@@ -15,9 +15,12 @@ RUN pip3 install selenium \
 pip install pytest \
 pip install webdriver-manager
 
+COPY main.py /bin/
+
 WORKDIR  ./
 
 ENV CHROME_BIN=/usr/bin/chromium-browser \
     CHROME_PATH=/usr/lib/chromium/
+RUN chmod +x /bin/main.py
 
-CMD ["sh","pytest main.py"]
+CMD pytest /bin/main.py

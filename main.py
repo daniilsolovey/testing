@@ -1,4 +1,3 @@
-from time import sleep
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -6,13 +5,13 @@ from selenium.webdriver.support import expected_conditions as EC
 
 
 class TestSuiteSettings():
-    chrome_driver = webdriver.Chrome()
+    chromeDriver = webdriver.Chrome()
 
     def setUp(self):
-        return self.chrome_driver
+        return self.chromeDriver
 
     def tearDown(self):
-        self.chrome_driver.close()
+        self.chromeDriver.close()
 
 
 class TestData():
@@ -66,5 +65,4 @@ def test_main():
         EC.element_to_be_clickable(
             (By.XPATH, "//div[@class='plan-card__buttons']/div[text()='Select']"))).click()
 
-    sleep(1)
     suiteSettings.tearDown()
