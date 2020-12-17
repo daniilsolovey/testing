@@ -1,68 +1,36 @@
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+import settings
+from time import sleep
+import keywords
 
 
-class TestSuiteSettings():
-    chromeDriver = webdriver.Chrome()
+def test_main(driver):
+    """
+    test login page, user tab, plans button, select button, sign_in button
+    """
+    locators = settings.Locators
+    user = settings.UserData
+    driver.get(locators.base_url)
+    sleep(1)
 
-    def setUp(self):
-        return self.chromeDriver
-
-    def tearDown(self):
-        self.chromeDriver.close()
-
-
-class TestData():
-    login = "testcaseqa@email.com"
-    password = "TestCaseQA"
-    userName = "TestCaseQA"
-    url = "https://area-dev.sl-int.team/"
-
-
-def test_main():
-    # get test data
-    suiteSettings = TestSuiteSettings()
-    testData = TestData
-    # set chrome driver
-    chrome = suiteSettings.setUp()
-    chrome.get(testData.url)
-    chrome.maximize_window()
-
-    # test 'sign in' button
-    WebDriverWait(chrome, 20).until(
-        EC.element_to_be_clickable(
-            (By.XPATH, "//a[text()='Sign in']"))).click()
+    keywords.web_driver_wait_element_clickable(driver, 20, locators.sign_in_btn).click()
     # test login/password
-    WebDriverWait(chrome, 20).until(
-        EC.element_to_be_clickable(
-            (By.XPATH, "//input[@id='signin-login']"))).send_keys(testData.login)
-    chrome.find_element_by_xpath(
-        "//input[@id='signin-pass']").send_keys(testData.password)
-    chrome.find_element_by_xpath(
-        "//button[@type='button' and contains(text(),'Sign in')]").click()
+    keywords.web_driver_wait_element_clickable(
+        driver, 20, locators.sign_in_login_filed,
+        ).send_keys(user.login)
+
+    driver.find_element_by_xpath(
+        locators.sign_in_password_field).send_keys(user.password)
+    driver.find_element_by_xpath(
+        locators.sign_in_submit_button).click()
 
     # test 'username' in menu
-    WebDriverWait(chrome, 20).until(
-        EC.presence_of_element_located(
-            (By.XPATH, "//span[@class='userName']")))
-    elements = chrome.find_elements_by_xpath(
-        "//span[@class='userName' and contains(text(), '{}')]".format(
-            testData.userName))
-    assert testData.password == elements[0].text
+    keywords.web_driver_wait_element_located(driver, 20, locators.user_name_tab)
+    elements = driver.find_elements_by_xpath(locators.user_name_btn)
+    assert user.password == elements[0].text
 
     # test 'plans' button
-    WebDriverWait(chrome, 20).until(
-        EC.element_to_be_clickable(
-            (By.XPATH, "//span[@class='userName']"))).click()
-    WebDriverWait(chrome, 20).until(
-        EC.element_to_be_clickable(
-            (By.XPATH, "//a[text()='Plans']"))).click()
+    keywords.web_driver_wait_element_clickable(driver, 20, locators.user_name_tab).click()
+    keywords.web_driver_wait_element_clickable(driver, 20, locators.plans_btn).click()
 
     # test 'select' button
-    WebDriverWait(chrome, 20).until(
-        EC.element_to_be_clickable(
-            (By.XPATH, "//div[@class='plan-card__buttons']/div[text()='Select']"))).click()
-
-    suiteSettings.tearDown()
+    keywords.web_driver_wait_element_clickable(driver, 20, locators.select_btn).click()
